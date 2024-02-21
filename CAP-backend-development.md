@@ -291,4 +291,19 @@ srv.on('changeToolStatus', async (req) => {
 })
 
 ```
+## Add to schema.cds
+```cds
+entity Tools {
+	key ID: String;
+	name: String;
+	description: String;
+	status: Boolean;
+	category: String;
+	dailyPrice: Integer;
+	dailyPriceCurrency: String;
+	available: Boolean;
+	contractItem: Association to one ContractItems on contractItem.tool = $self;
+}
+
+```
 
