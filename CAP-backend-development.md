@@ -137,3 +137,34 @@ CN-109,Rusell & CO Diamond Mining - Australian Full Operation Contract,2023-03-0
         }
 ```
 
+## Create external-test.js (implementation service)
+```js
+const cds = require('@sap/cds')
+
+module.exports = async (srv) => {
+
+//* Local Service Entities
+const {Contracts, BusinessPartners, ContractItems } = srv.entities;
+
+// //* Tools API connection
+// const toolsAPI = await cds.connect.to("toolsManager")
+
+//*Business Partner Connect
+const bupa = await cds.connect.to('API_BUSINESS_PARTNER')
+const {A_BusinessPartner} = bupa.entities;
+
+
+//* Entity BusinessPartners READ -- oData
+srv.on('READ', 'BusinessPartners', async (req) => {
+	return await bupa.transaction(req).send({
+		query: req.query,
+		headers: {
+		    apikey: "lSnMaBSXTGh7YX1aLfAyN08AdDkVRsfz"
+
+		}
+	})
+})
+}
+```
+## Run with sandbox profile
+`cds watch --profile sandbox`
