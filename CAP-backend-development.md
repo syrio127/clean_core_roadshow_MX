@@ -168,3 +168,24 @@ srv.on('READ', 'BusinessPartners', async (req) => {
 ```
 ## Run with sandbox profile
 `cds watch --profile sandbox`
+
+
+## Add Tools external system
+```js
+"toolsManager": {
+	"kind": "rest"
+	
+
+"[sandbox]": {
+	"credentials": {
+		"url": "https://p2c-poc-rest-srv-ts-production.up.railway.app/"
+	}
+},
+
+"[production]": {
+	"credentials": {
+		"destination": "P2C-ToolManager"
+	}
+  }
+},
+```
