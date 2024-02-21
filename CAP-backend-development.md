@@ -170,25 +170,37 @@ srv.on('READ', 'BusinessPartners', async (req) => {
 `cds watch --profile sandbox`
 
 
-## Add Tools external system
+## replace cds section in package.json
 ```json
-"toolsManager": {
-	"kind": "rest",
-	"credentials": {
-		"url": "http://localhost:8080",
-		"requestTimeout": 3000
-	},
-
-"[sandbox]": {
-	"credentials": {
-		"url": "https://p2c-poc-rest-srv-ts-production.up.railway.app/"
-	}
-},
-
-"[production]": {
-	"credentials": {
-		"destination": "P2C-ToolManager"
-	}
+  "cds": {
+    "requires": {
+      "API_BUSINESS_PARTNER": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_BUSINESS_PARTNER",
+        "[sandbox]":{
+          "credentials": {
+            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER"
+          }
+        }
+      },
+      "toolsManager": {
+        "kind": "rest",
+        "credentials": {
+          "url": "http://localhost:8080",
+          "requestTimeout": 3000
+        },
+        "[sandbox]": {
+          "credentials": {
+            "url": "https://p2c-poc-rest-srv-ts-production.up.railway.app/"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "destination": "P2C-ToolManager"
+          }
+        }
+    }
   }
-},
+}
+}
 ```
