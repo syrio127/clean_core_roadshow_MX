@@ -124,7 +124,7 @@ CN-109,Rusell & CO Diamond Mining - Australian Full Operation Contract,2023-03-0
 
 ```
 
-## Install additional packages
+## Install additional packages (as an administrator)
 ```npm install @sap-cloud-sdk/http-client @sap-cloud-sdk/util ```
 
 
