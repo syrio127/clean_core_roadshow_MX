@@ -54,3 +54,13 @@ service  ContractsService @(path:'/contracts'){
 
 }
 ```
+## p2c.cap.contracts-Contracts.csv
+```csv
+ID,description,beginDate,endDate,totalMonthValue,totalMonthCurrency
+CN-100,CCL Mining CO - Perforation 2023,2023-03-01,2023-10-25,0,USD
+CN-105,Pacific Transportation INC. South Africa Mining,2022-02-02,2028-04-02,0,USD
+CN-106,Atlantic Transportation INC. - Cooper Mine-Port Movement,2023-02-02,2026-05-18,0,USD
+CN-108,Pure Gold Company - Explosives and Perforation, 2023-02-02,2025-12-02,0,USD
+CN-109,Rusell & CO Diamond Mining - Australian Full Operation Contract,2023-03-03,2030-10-18,0,USD
+```
+
