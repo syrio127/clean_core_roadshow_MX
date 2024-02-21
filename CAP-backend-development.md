@@ -362,3 +362,185 @@ cef9a93e-2f97-47ec-8256-7ae3ef7b7704,CN-109,2023-03-03,2023-03-03,17000,USD,64e6
 ```
 
 
+## Replace external-test.js file
+```const cds = require('@sap/cds');
+const { query } = require('express');
+
+module.exports = async (srv) => {
+
+    //*Local Service Entities
+    const {Contracts, BusinessPartners, ContractItems} = srv.entities;
+
+    //* Tools API connection
+    const toolsAPI = await cds.connect.to("toolsManager")
+
+    //* Business Partners Connect
+    const bupa = await cds.connect.to('API_BUSINESS_PARTNER')
+    const {A_BusinessPartner} = bupa.entities;
+
+    //*Entity BusinessPartners READ -- oData
+    
+    srv.on('READ', 'BusinessPartners', async (req) => {
+        return await bupa.transaction(req).send({
+            query: req.query,
+            headers: {
+                apikey: "lSnMaBSXTGh7YX1aLfAyN08AdDkVRsfz"
+            }
+        })
+    })
+
+
+     /**
+     //* REST API Function Calls for Tools
+     */
+
+     //**Function Read Tools -- NO oData
+
+    srv.on('getTools',async (req) => {
+        
+        const toolsAPI = await cds.connect.to("toolsManager")
+        return await toolsAPI.send({query: 'GET /api/tools', headers:{
+            userName: "p2c-comm-user",
+            APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+        }})
+                    
+    })
+
+    //* Function Read Tool By ID -- No oData
+    //* URL de Consulta: http://localhost:4004/demosrv/getToolById(id='64da6b6e55b27b4c05d262c1')
+
+    srv.on('getToolById',async (req) => {
+        
+        const { id } = req.data
+        const toolsAPI = await cds.connect.to("toolsManager")
+        return await toolsAPI.send({query:`GET /api/tools/${id}`, headers:{
+            userName: "p2c-comm-user",
+            APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+         }})
+    })
+
+    //* Function to get a list of available tools according description
+    //* URL de Consulta: http://localhost:4004/demosrv/getToolsByDescription(description='High performance Drill')
+
+    srv.on('getToolsByDescription', async (req) => {
+        
+        const { description } = req.data 
+        const toolsAPI = await cds.connect.to("toolsManager")
+        return await toolsAPI.send({query:`GET /api/tools/${description}/1`, headers: {
+            userName: "p2c-comm-user",
+            APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+        }})
+    })
+
+
+    //* Function to change boolean status of a tool (available), to be called on
+    //* contract item creation
+    
+    srv.on('changeToolStatus', async (req) => {
+        
+        const { id } = req.data
+        const toolsAPI = await cds.connect.to("toolsManager")
+        return await toolsAPI.send({query:`PATCH /api/tools/${id}`, headers: {
+            userName: "p2c-comm-user",
+            APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+        }})
+    })
+
+
+   
+    //* Contract Item Creation improvement
+    //* Change Tool Availability in Tool Management System
+    //* (Calculate item price)
+    //* (Add tool name)
+    
+    srv.before('CREATE','ContractItems',async (req) => {
+
+        //* Days duration calculation
+        
+        let beginDate = new Date(`${ req.data.beginDate }`).getTime();
+        let endDate = new Date(`${ req.data.endDate }`).getTime();
+        let daysDiff = endDate - beginDate;
+        const difference = daysDiff/(1000*60*60*24);
+        
+        
+        //*Change tool availability
+        await toolsAPI.send({
+            query: `PATCH /api/tools/${req.data.tool_ID}`,
+            headers: {
+                userName: "p2c-comm-user",
+                APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+            }
+        })
+        .then(res => {
+            const msg = res;
+        })
+
+
+        //*Price Calculation and add tool name
+        await toolsAPI.send({
+            query: `GET /api/tools/${req.data.tool_ID}`,
+            headers: {
+                userName: "p2c-comm-user",
+                APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+            }
+        })
+            .then (res => {
+                req.data.toolName = res.tool.toolName;
+                req.data.price = res.tool.toolDailyPrice * difference;
+        })
+    })
+
+
+    /**
+    //*Implement Contract Value Calculation
+    //*Implement Business Partner Call - SAP S4HANA API
+    */
+
+    //*Total Contract Value Calculation
+
+    srv.after('READ','Contracts',async (contracts, req) => {
+
+        const db = srv.transaction(req);
+        for(const each of contracts){
+            
+            //*Total Contract Value Calculation
+            const items = await db.run(SELECT.from('ContractItems').where({contract_ID:each.ID}))
+            for (let i = 0; i < items.length; i++) {
+                const element = items[i];
+                each.totalMonthValue  += element.price
+            }
+        }
+    })
+    
+    
+    //*BP Name Completion
+    srv.after('READ','Contracts',async (contracts, req) => {
+
+        const db = srv.transaction(req);
+        for(const cont of contracts){
+    
+            //* BP Name Completion
+            const query = SELECT(A_BusinessPartner)
+            .where({BusinessPartner: cont.businessPartner_BusinessPartner})
+            .columns('BusinessPartnerFullName')
+
+            const bpName = await bupa.transaction().send({
+                query: query,
+                headers: {
+                    apikey: "lSnMaBSXTGh7YX1aLfAyN08AdDkVRsfz"
+                }
+            })
+
+            if(bpName){
+                cont.bpName = bpName[0].BusinessPartnerFullName;
+            } else {
+                cont.bpName = 'BP Name Not Found'
+            }
+            
+        }
+    })
+
+
+}
+```
+
