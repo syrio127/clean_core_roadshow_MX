@@ -39,3 +39,18 @@ service AdminService @(path: '/admin'){
 
 }
 ```
+## contracts-service.cds
+```js
+using { p2c.cap.contracts as my} from '../db/schema';
+
+service  ContractsService @(path:'/contracts'){
+
+    entity Contracts as select from my.Contracts {
+        ID, description
+    };
+
+    @readonly entity ContractItems as projection on my.ContractItems;
+
+
+}
+```
