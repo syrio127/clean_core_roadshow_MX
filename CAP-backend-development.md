@@ -91,5 +91,12 @@ service DemoService @(path: '/demosrv'){
 }
 ```
 
+## API_BUSINESS_PARTNER-A_BusinessPartner.csv
+```csv
+BusinessPartner;BusinessPartnerFullName;BusinessPartnerIsBlocked
+1000038;Williams Electric Drives;false
+1000040;Smith Batteries Ltd;false
+1000042;Johnson Automotive Supplies;true
+```
 
 
