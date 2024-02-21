@@ -128,4 +128,12 @@ CN-109,Rusell & CO Diamond Mining - Australian Full Operation Contract,2023-03-0
 ```npm install @sap-cloud-sdk/http-client @sap-cloud-sdk/util ```
 
 
+## Add to package.json in API_BUSINESS_PARTNER definition
+```json
+"[sandbox]":{
+          "credentials": {
+            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_BUSINESS_PARTNER"
+          }
+        }
+```
 
