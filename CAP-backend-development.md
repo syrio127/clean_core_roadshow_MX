@@ -1,6 +1,6 @@
 # CAP Backend Development - BTP Clean Core Roadshow
 
-## Schemma.cds snippet
+## Schema.cds snippet
 
 ```js
 entity Contracts : managed {
@@ -21,7 +21,7 @@ entity Contracts : managed {
 	endDate: Date;
 	price: Integer;
 	priceCurrency: String;
-	tool: Association to one Tools;
+	// tool: Association to one Tools;
 	toolName: String
 }
 
