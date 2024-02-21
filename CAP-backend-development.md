@@ -64,3 +64,15 @@ CN-108,Pure Gold Company - Explosives and Perforation, 2023-02-02,2025-12-02,0,U
 CN-109,Rusell & CO Diamond Mining - Australian Full Operation Contract,2023-03-03,2030-10-18,0,USD
 ```
 
+## p2c.cap.contracts-ContractItems.csv
+```csv
+ID,contract_ID,beginDate,endDate,price,priceCurrency
+02d29d9d-3538-4140-8381-67ee542928db,CN-100,2023-03-01,2023-03-30,5700,USD
+0b9e270f-0d11-4dd1-bb52-976812bcd32f,CN-100,2023-03-01,2023-03-10,180000,USD
+63f57654-ee43-4f05-8fa2-7fd3e240517f,CN-105,2022-02-02,2022-02-02,190,USD
+a324e459-a773-4616-8f48-dc60a3ab890f,CN-106,2023-02-02,2023-02-02,1400,USD
+ac184d7a-b485-493e-be77-9d34c2d76407,CN-108,2023-02-02,2023-02-02,17000,USD
+cef9a93e-2f97-47ec-8256-7ae3ef7b7704,CN-109,2023-03-03,2023-03-03,17000,USD
+```
+
+
