@@ -99,4 +99,14 @@ BusinessPartner;BusinessPartnerFullName;BusinessPartnerIsBlocked
 1000042;Johnson Automotive Supplies;true
 ```
 
+## Add to schema.cds
+```js
+using { API_BUSINESS_PARTNER as bpar } from '../srv/external/API_BUSINESS_PARTNER.csn';
+
+entity BusinessPartners as projection on bpar.A_BusinessPartner {
+    key BusinessPartner,
+    BusinessPartnerFullName,
+    BusinessPartnerIsBlocked 
+}
+```
 
