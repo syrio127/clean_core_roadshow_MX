@@ -306,7 +306,7 @@ entity Tools {
 }
 
 ```
-## Improve contract item creation in external-test.cds
+## Improve contract item creation in external-test.js
 ```js
 //* Contract Item Creation improvement
 //* Change Tool Availability in Tool Management System
