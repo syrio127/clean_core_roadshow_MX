@@ -171,10 +171,13 @@ srv.on('READ', 'BusinessPartners', async (req) => {
 
 
 ## Add Tools external system
-```js
+```json
 "toolsManager": {
-	"kind": "rest"
-	
+	"kind": "rest",
+	"credentials": {
+		"url": "http://localhost:8080",
+		"requestTimeout": 3000
+	},
 
 "[sandbox]": {
 	"credentials": {
