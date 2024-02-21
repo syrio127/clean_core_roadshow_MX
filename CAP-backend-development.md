@@ -306,4 +306,47 @@ entity Tools {
 }
 
 ```
+## Improve contract item creation in external-test.cds
+```js
+//* Contract Item Creation improvement
+//* Change Tool Availability in Tool Management System
+//* (Calculate item price)
+//* (Add tool name)
+
+srv.before('CREATE','ContractItems',async (req) => {
+
+//* Days duration calculation
+let beginDate = new Date(`${ req.data.beginDate }`).getTime();
+let endDate = new Date(`${ req.data.endDate }`).getTime();
+let daysDiff = endDate - beginDate;
+const difference = daysDiff/(1000*60*60*24);
+
+//*Change tool availability
+await toolsAPI.send({
+	query: `PATCH /api/tools/${req.data.tool_ID}`,
+		headers: {
+			userName: "p2c-comm-user",
+			APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+		}
+	})
+	.then(res => {
+		const msg = res;
+	})
+
+//*Price Calculation and add tool name
+
+await toolsAPI.send({
+	query: `GET /api/tools/${req.data.tool_ID}`,
+		headers: {
+			userName: "p2c-comm-user",
+			APIKey: "K306GLEZ1TPZZU4CIVGTQFQHXZ2920"
+		}
+	})
+	.then (res => {
+		req.data.toolName = res.tool.toolName;
+		req.data.price = res.tool.toolDailyPrice * difference;
+	})
+})
+
+```
 
