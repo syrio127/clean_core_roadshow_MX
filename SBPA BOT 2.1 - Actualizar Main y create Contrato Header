@@ -1,1 +1,70 @@
+Actualizar Main 
 
+2 - Create Contrato Header
+Input
+Contrato	Contrato
+flowControl	Control
+
+output
+flowControlH	Control
+
+Process
+1 - Custom Script
+input 
+Contrato	Contrato	Step0.Contrato
+
+output
+options		Any
+
+Script
+return {
+    url: "/demosrv/Contracts",
+    method: 'POST',
+    responseType:'json', // parse the body of the result as a JSON object
+    resolveBodyOnly:false, // get only the body of the response
+    json: Contrato
+};
+
+2 - Log Message (Control y pruebas)
+Input
+Message		Options
+
+3 - Try
+Parameter
+errors to catch	RequestError
+
+4 - Call Web Service With Destination
+Input
+destination	$.ContratosAPI
+optios		Step1.Options
+
+5 - Condition
+Parameters	
+Control Expression	Step4.obj.statusCode == '201'
+
+In condition
+6 - Set Variable Value
+Input
+Variable	Step0.flowControl.ContratoHeader
+value		True
+
+In Default
+7 - Set cariable Value 2
+Input
+Variable	Step0.flowControl.ContratoHeader
+Value		true
+
+5 - end Condition
+
+3 - Catch
+Log Message
+Input 
+Message		"Error Request Web Service" + Step3.error.code + " - " + Step3.error.message
+
+9 - Log Message
+Input
+Message		Step0.flowContro
+
+end
+Output
+flowControlH	flowControl
